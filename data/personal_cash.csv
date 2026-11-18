@@ -1,0 +1,3 @@
+cash_id,line_id,kind,amount,at
+PC1,L1,receive,100,2026-10-14T08:00:00+08:00
+PC2,L2,receive,200,2026-10-15T08:00:00+08:00

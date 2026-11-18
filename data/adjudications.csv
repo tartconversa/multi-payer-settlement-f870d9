@@ -1,0 +1,5 @@
+adjudication_id,application_id,state,amount,confirmed_at
+AD1,AP1,approved,300,2026-10-13T08:00:00+08:00
+AD2,AP2,approved,100,2026-10-14T08:00:00+08:00
+AD3,AP3,approved,200,2026-10-15T08:00:00+08:00
+AD4,AP4,pending,100,2026-10-16T08:00:00+08:00

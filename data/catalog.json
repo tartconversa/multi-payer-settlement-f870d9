@@ -1,0 +1,416 @@
+{
+  "title": "多支付方医疗费用结算事实仓",
+  "synthetic": true,
+  "tables": [
+    {
+      "name": "members",
+      "description": "合成人及家庭。",
+      "columns": [
+        {
+          "name": "person",
+          "type": "string",
+          "description": "人",
+          "nullable": true
+        },
+        {
+          "name": "household",
+          "type": "string",
+          "description": "家庭",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "person"
+      ],
+      "references": [],
+      "path": "data/members.csv",
+      "row_count": 3,
+      "sha256": "9a26f2473668a11bd5f69fab4ef1ab272a383916b2ec17f62b6d07aef503b419"
+    },
+    {
+      "name": "enrollments",
+      "description": "计划参加有效期。",
+      "columns": [
+        {
+          "name": "enrollment_id",
+          "type": "string",
+          "description": "行",
+          "nullable": true
+        },
+        {
+          "name": "person",
+          "type": "string",
+          "description": "人",
+          "nullable": true
+        },
+        {
+          "name": "plan_id",
+          "type": "string",
+          "description": "计划",
+          "nullable": true
+        },
+        {
+          "name": "start",
+          "type": "date",
+          "description": "起",
+          "nullable": true
+        },
+        {
+          "name": "end",
+          "type": "date",
+          "description": "止",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "enrollment_id"
+      ],
+      "references": [
+        {
+          "column": "person",
+          "target_table": "members",
+          "target_column": "person"
+        }
+      ],
+      "path": "data/enrollments.csv",
+      "row_count": 3,
+      "sha256": "944138764d7ac13e316e88fbbe6863f1a798019beab9b49cb28fd71b81396638"
+    },
+    {
+      "name": "plans",
+      "description": "责任承接及共享权益。",
+      "columns": [
+        {
+          "name": "plan_id",
+          "type": "string",
+          "description": "计划",
+          "nullable": true
+        },
+        {
+          "name": "priority",
+          "type": "integer",
+          "description": "次序",
+          "nullable": true
+        },
+        {
+          "name": "rate",
+          "type": "number",
+          "description": "承担比例",
+          "nullable": true
+        },
+        {
+          "name": "benefit_pool",
+          "type": "string",
+          "description": "共享池类",
+          "nullable": true
+        },
+        {
+          "name": "annual_limit",
+          "type": "number",
+          "description": "年度元",
+          "nullable": true
+        },
+        {
+          "name": "eligible_codes",
+          "type": "string",
+          "description": "允许项目逗号分隔",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "plan_id"
+      ],
+      "references": [],
+      "path": "data/plans.csv",
+      "row_count": 2,
+      "sha256": "36600661d919efe655fafe83d1e16534cd7234391daf277cb17e710040a405d8"
+    },
+    {
+      "name": "charges",
+      "description": "费用行。",
+      "columns": [
+        {
+          "name": "line_id",
+          "type": "string",
+          "description": "行",
+          "nullable": true
+        },
+        {
+          "name": "person",
+          "type": "string",
+          "description": "人",
+          "nullable": true
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "description": "项目",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "费用元",
+          "nullable": true
+        },
+        {
+          "name": "service_date",
+          "type": "date",
+          "description": "发生日",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "line_id"
+      ],
+      "references": [
+        {
+          "column": "person",
+          "target_table": "members",
+          "target_column": "person"
+        }
+      ],
+      "path": "data/charges.csv",
+      "row_count": 3,
+      "sha256": "f6de740cc36395638e6d034fd71861ef31d48df00386a66f59e897ece00b77ff"
+    },
+    {
+      "name": "applications",
+      "description": "申请非裁定。",
+      "columns": [
+        {
+          "name": "application_id",
+          "type": "string",
+          "description": "申请",
+          "nullable": true
+        },
+        {
+          "name": "line_id",
+          "type": "string",
+          "description": "费用",
+          "nullable": true
+        },
+        {
+          "name": "plan_id",
+          "type": "string",
+          "description": "计划",
+          "nullable": true
+        },
+        {
+          "name": "requested",
+          "type": "number",
+          "description": "申请额",
+          "nullable": true
+        },
+        {
+          "name": "at",
+          "type": "datetime",
+          "description": "收到",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "application_id"
+      ],
+      "references": [
+        {
+          "column": "line_id",
+          "target_table": "charges",
+          "target_column": "line_id"
+        },
+        {
+          "column": "plan_id",
+          "target_table": "plans",
+          "target_column": "plan_id"
+        }
+      ],
+      "path": "data/applications.csv",
+      "row_count": 4,
+      "sha256": "a49fea4b00775a1bc01e19207854360f29c906cca4ac228505fe9db61846ea78"
+    },
+    {
+      "name": "adjudications",
+      "description": "裁定身份，每行一次真实占用。",
+      "columns": [
+        {
+          "name": "adjudication_id",
+          "type": "string",
+          "description": "裁定",
+          "nullable": true
+        },
+        {
+          "name": "application_id",
+          "type": "string",
+          "description": "申请",
+          "nullable": true
+        },
+        {
+          "name": "state",
+          "type": "string",
+          "description": "approved或pending",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "认可或待审额",
+          "nullable": true
+        },
+        {
+          "name": "confirmed_at",
+          "type": "datetime",
+          "description": "时点",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "adjudication_id"
+      ],
+      "references": [
+        {
+          "column": "application_id",
+          "target_table": "applications",
+          "target_column": "application_id"
+        }
+      ],
+      "path": "data/adjudications.csv",
+      "row_count": 4,
+      "sha256": "c0e80d5414b0a5f3215535ae714bdb849d4fb35e037618a4b1bacc8cc7bc3c7b"
+    },
+    {
+      "name": "payments",
+      "description": "支付方到账，支持分次。",
+      "columns": [
+        {
+          "name": "payment_id",
+          "type": "string",
+          "description": "到账",
+          "nullable": true
+        },
+        {
+          "name": "adjudication_id",
+          "type": "string",
+          "description": "裁定",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "元",
+          "nullable": true
+        },
+        {
+          "name": "at",
+          "type": "datetime",
+          "description": "到账日",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "payment_id"
+      ],
+      "references": [
+        {
+          "column": "adjudication_id",
+          "target_table": "adjudications",
+          "target_column": "adjudication_id"
+        }
+      ],
+      "path": "data/payments.csv",
+      "row_count": 3,
+      "sha256": "28a577d406ac850aa6b05e00557ee455a4f480e43ed0b2c960c6924536d57e5a"
+    },
+    {
+      "name": "personal_cash",
+      "description": "个人实收，未退款不能造负现金。",
+      "columns": [
+        {
+          "name": "cash_id",
+          "type": "string",
+          "description": "流水",
+          "nullable": true
+        },
+        {
+          "name": "line_id",
+          "type": "string",
+          "description": "费用",
+          "nullable": true
+        },
+        {
+          "name": "kind",
+          "type": "string",
+          "description": "receive或refund",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "元",
+          "nullable": true
+        },
+        {
+          "name": "at",
+          "type": "datetime",
+          "description": "时点",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "cash_id"
+      ],
+      "references": [
+        {
+          "column": "line_id",
+          "target_table": "charges",
+          "target_column": "line_id"
+        }
+      ],
+      "path": "data/personal_cash.csv",
+      "row_count": 2,
+      "sha256": "6cd76455dfa2257db42cc7b7170e95f7106876004aea8874a6069606807692f7"
+    },
+    {
+      "name": "later_revocations",
+      "description": "后续撤回原裁定份额。",
+      "columns": [
+        {
+          "name": "revocation_id",
+          "type": "string",
+          "description": "撤",
+          "nullable": true
+        },
+        {
+          "name": "adjudication_id",
+          "type": "string",
+          "description": "原裁定",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "number",
+          "description": "撤回元",
+          "nullable": true
+        },
+        {
+          "name": "at",
+          "type": "datetime",
+          "description": "收到",
+          "nullable": true
+        }
+      ],
+      "key": [
+        "revocation_id"
+      ],
+      "references": [
+        {
+          "column": "adjudication_id",
+          "target_table": "adjudications",
+          "target_column": "adjudication_id"
+        }
+      ],
+      "path": "data/later_revocations.csv",
+      "row_count": 1,
+      "sha256": "56cb22297e79a8de9ab425f8d7acdc315d6804b03e23a550523fad3b65e50edd"
+    }
+  ]
+}
